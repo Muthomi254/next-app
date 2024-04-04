@@ -7,8 +7,9 @@ interface User {
 const UsersPage = async () => {
 
 const res = await fetch(
-  'https://jsonplaceholder.typicode.com/users',
-  { next: {revalidate: 60}}) //refresh caching after every 60seconds
+  // 'https://jsonplaceholder.typicode.com/users', //static rendering(at build time)
+  'https://jsonplaceholder.typicode.com/users',{cache: "no-store"}) //dynamic rendering(at request time)
+  // { next: {revalidate: 60}}) //refresh caching after every 60seconds
     // { next: "no-store" } //disable caching
 const users:User[] = await res.json(); 
 
@@ -19,6 +20,7 @@ const users:User[] = await res.json();
    
     <div>
       <h1>Users</h1>
+      <p>{new Date().toLocaleTimeString()}</p>
       <ul>
         {users.map((user) => (
           <li key={user.id}>{user.name}</li>
